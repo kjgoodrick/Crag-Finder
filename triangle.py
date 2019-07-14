@@ -1,5 +1,5 @@
 from typing import List
-from Coordinate import Coordinate
+from coordinate import Coordinate
 from math import sqrt
 import numpy as np
 import miniball

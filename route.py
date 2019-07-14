@@ -85,4 +85,5 @@ class RatedRoute(Route):
 
         for c in sorted_crags:
             if not base_only or c[0] in base_level_crags:
-                print("{}: {:5g}".format(c[0], c[1]))
+                if c[1] > 0:
+                    print("{}: {:5g}".format(c[0], c[1]))
