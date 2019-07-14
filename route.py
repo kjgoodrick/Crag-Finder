@@ -4,6 +4,12 @@ from collections import defaultdict
 
 
 class Route:
+    """
+    A class that stores data for a climbing route
+
+    This class should be modified with extreme care to prevent errors when pulling from the cache. Most changes would
+    be better placed in RatedRoute. This class contains all of the information returned from Mountain Project.
+    """
 
     id = None
     name = None
@@ -34,8 +40,11 @@ class Route:
 
 
 class RatedRoute(Route):
+    """
+    Class that includes additional rating attributes and methods
+    """
     sport_type = 'Sport'
-    rating_regex = r"5\.(\d+)([abcd]?)"
+    rating_regex = r"5\.(\d+)([abcd+-]?)"
 
     def __init__(self, route):
         Route.__init__(self, route.__dict__)
@@ -49,21 +58,58 @@ class RatedRoute(Route):
 
     @property
     def num_rating(self):
-        grade = re.match(self.rating_regex, self.rating)
-        base = int(grade.group(1))
-        dec = grade.group(2)
-        dec = int(ord(dec) - 96) if len(dec) > 0 else 0
+        """A numeric representation of a climbs grade
+        """
+        return RatedRoute.str2num_rating(self.rating)
+
+    @ staticmethod
+    def str2num_rating(str_rating: str) -> float:
+        """
+        Converts a string rating to a numeric rating
+        e.g. '5.9' -> 9, 5.10a -> 10.1, 5.11d -> 11.4
+        modifiers are in this order:
+        lower grade's d, -, base, a, b, +, c, d, higher grade's -
+
+        Parameters
+        ----------
+        str_rating: str
+            A string representing a climbing grade
+
+        Returns
+        -------
+        float
+            A numeric representation of the grade
+        """
+        # Find the grade and the modifier if one exists
+        grade = re.match(RatedRoute.rating_regex, str_rating)
+        base = int(grade.group(1))  # Climb's Grade
+        suf = grade.group(2)  # Climb's Grade Modifier
+
+        # map modifier
+        # a, b, c, d, +, -> 1, 2, 3, 4, 2.5, -2.5
+        dec = int(ord(suf) - 96) if len(suf) > 0 else 0
+        dec = 2.5 if suf == '+' else dec
+        dec = -2.5 if suf == '-' else dec
 
         return base + dec / 10
 
     @staticmethod
     def sort_crags(routes: List['RatedRoute'], parent_crag: str = None, base_only: bool = False):
         """
-        sort_crags
-        :param routes:
-        :param parent_crag:
-        :param base_only:
-        :return:
+        Sorts crags by score, can filter out crags not within a given parent crag or that are not base level crags.
+
+        Parameters
+        ----------
+        routes : List[RatedRoute]
+            A list of RatedRoute objects
+        parent_crag : str
+            A string representing the parent crag, all returned crags will be a sub-crag of this crag
+        base_only : bool
+            Should be set to True if only base level crags should be returned, base level means a crag has no sub-crags
+
+        Returns
+        -------
+
         """
         if parent_crag is not None:
             child_routes = [r for r in routes if parent_crag in r.location]
