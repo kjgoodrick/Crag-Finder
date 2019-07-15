@@ -169,5 +169,3 @@ def validate_key():
 
     # Update settings with new found API key
     gen_settings.gen_settings(MP_API_KEY)
-
-    return

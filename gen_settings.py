@@ -27,6 +27,17 @@ def gen_settings(key='your_key_here'):
     # Add Key to configuration
     config['MP API'] = {'key': key}
 
+    # Add score settings
+    config['SCORE'] = {
+        'required': 'sport',
+        'optional': 'tr',
+        'prohibited': 'other',
+        'min_rating': '5.5',
+        'max_rating': '5.9+',
+        'min_pitches': '1',
+        'max_pitches': '1',
+    }
+
     # Check if settings already exists and read in old values to prevent overwriting old settings
     if os.path.isfile(SETTINGS_FILE):
         config.read(SETTINGS_FILE)
