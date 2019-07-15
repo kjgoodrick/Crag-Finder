@@ -4,6 +4,7 @@ A script for finding crags
 # Installation
 ## Prerequisites
 1.) Python 3 should be installed: https://www.python.org/downloads/
+
 2.) Git should also be instlaled: https://git-scm.com/download/win
 
 ## Install Crag Finder
@@ -38,9 +39,13 @@ pip install -r requirements.txt
 jupyter notebook
 ````
 2.) Open the `Crag Finer.ipynb` File in the browser windows that opens
+
 3.) Run the first two cells and enter your Mountain Project API key when prompted
+
 4.) Run the third cell, you should see a map pop up
+
 5.) Run the fourth cell, keep the map in view while you do this!
+
 6.) Run the remaining cells to see the routes in Boulder sorted by the default rating. 
 
 
