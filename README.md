@@ -38,7 +38,7 @@ pip install -r requirements.txt
 ````
 jupyter notebook
 ````
-2.) Open the `Crag Finer.ipynb` File in the browser windows that opens
+2.) Open the `Crag Finder.ipynb` File in the browser windows that opens
 
 3.) Run the first two cells and enter your Mountain Project API key when prompted
 
