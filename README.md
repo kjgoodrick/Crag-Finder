@@ -5,7 +5,7 @@ A script for finding crags
 ## Prerequisites
 1.) Python 3 should be installed: https://www.python.org/downloads/
 
-2.) Git should also be instlaled: https://git-scm.com/download/win
+2.) Git should also be installed: https://git-scm.com/download/win
 
 ## Install Crag Finder
 1.) Clone the git Repository
