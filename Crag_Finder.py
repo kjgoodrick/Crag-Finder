@@ -36,7 +36,8 @@ t1 = Triangle([sw_co, se_co, nw_co])
 t2 = Triangle([nw_co, ne_co, se_co])
 
 # Find all routes in CO
-routes = mountain_project.process_triangles([t1, t2])
+triangles = mountain_project.process_triangles([t1, t2])
+routes = {r for t in triangles for r in t.routes}
 # Find all routes in SW CO
 # routes = mountain_project.process_triangles([t1])
 

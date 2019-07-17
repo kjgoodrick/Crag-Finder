@@ -7,7 +7,7 @@ Notes
 In order to prevent the cache from being cleared, modification of the send_request method should be avoided.
 """
 from triangle import Triangle
-from typing import List
+from typing import List, Set, Tuple
 from route import Route
 
 from ipyleaflet import Map, Polygon
@@ -49,7 +49,7 @@ def next_color():
     return next(colors)
 
 
-def process_triangles(triangles: List[Triangle], m: Map = None):
+def process_triangles(triangles: List[Triangle], m: Map = None) -> Set[Triangle]:
     """
     Searches through a list of triangles and finds the routes within each triangle, optionally plots the results on a
     map as it goes. If a triangle is too large or contains to many routes it is split into smaller triangles and the
@@ -66,18 +66,17 @@ def process_triangles(triangles: List[Triangle], m: Map = None):
 
     Returns
     -------
-    final_routes: set
-        A set of routes within the triangles
+    final_triangles: Set[Triangle]
+        A set containing the final triangles
 
     """
-    # Create Storage sets
-    final_routes = set()
+    # Create Storage set
     final_triangles = set()
 
     for triangle in triangles:
         # If the triangle is too large break into two smaller triangles and try again
         if triangle.mini_miles > 100:  # Triangle is too large
-            final_routes.update(process_triangles(triangle.split_triangle(), m))
+            final_triangles.update(process_triangles(triangle.split_triangle(), m))
         else:  # Triangle is not too large
             # find routes within the triangle
             routes = get_routes(triangle, m)
@@ -87,18 +86,19 @@ def process_triangles(triangles: List[Triangle], m: Map = None):
                 # Check if triangle is smaller than average crag size
                 if triangle.mini_miles > 2:  # Triangle is not too small
                     # Try again with even smaller triangles
-                    final_routes.update(process_triangles(triangle.split_triangle(), m))
+                    final_triangles.update(process_triangles(triangle.split_triangle(), m))
                 else:  # Triangle is smaller than average crag
                     # Split the triangle by difficulty and try again
                     # At this point if there are more than 500 routes of a grade within 2 miles some will be lost
                     # This is highly unlikely though, so I do not think it will ever need further subdivision.
-                    final_routes.update(process_triangles(triangle.split_difficulty(), m))
+                    final_triangles.update(process_triangles(triangle.split_difficulty(), m))
             else:  # Not too many triangles in the triangle
                 # Add routes in the triangle to the set
-                final_routes.update(routes)
+                triangle.routes = routes
+                final_triangles.add(triangle)
 
     # Send newly found routes back to the previous levels
-    return final_routes
+    return final_triangles
 
 
 def get_routes(triangle: Triangle, m: Map = None) -> List[Route]:

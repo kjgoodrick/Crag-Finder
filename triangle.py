@@ -1,5 +1,6 @@
 from typing import List
 from coordinate import Coordinate
+from route import Route
 from math import sqrt
 import numpy as np
 import miniball
@@ -31,6 +32,10 @@ class Triangle:
     _circle_radius = None
     _mini_center = None
     _mini_radius = None
+
+    routes: List[Route] = None
+    """A List of routes that are in the triangle's miniball
+    """
 
     def __init__(self, vertices: List[Coordinate], min_diff: str = '5.0', max_diff: str = '5.15'):
         self.vertices = vertices
