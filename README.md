@@ -29,7 +29,6 @@ source env/bin/activate
 
 4.) Install required packages
 ````
-pip install numpy
 pip install -r requirements.txt
 ````
 
